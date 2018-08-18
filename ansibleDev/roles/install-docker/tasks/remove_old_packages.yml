@@ -1,0 +1,10 @@
+---
+
+- name: uninstall_old_packages
+  copy:
+    content: "Removed:{{'\n'}}{{ docker_old_packages | join('\n') }}"
+    dest: /var/tmp/uninstall.docker
+  notify: uninstall_old_packages
+
+- name: flush handlers
+  meta: flush_handlers

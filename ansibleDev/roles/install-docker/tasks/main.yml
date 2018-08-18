@@ -1,0 +1,7 @@
+---
+
+- name: Remove previous installations
+  include_tasks: remove_old_packages.yml
+
+- name: Install & Start Docker CE
+  include_tasks: install_docker.yml
