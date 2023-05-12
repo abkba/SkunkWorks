@@ -1,0 +1,5 @@
+---
+- name: Uninstall deprecated packages
+  ansible.builtin.yum:
+    name: "{{ docker_remove_packages }}"
+    state: absent

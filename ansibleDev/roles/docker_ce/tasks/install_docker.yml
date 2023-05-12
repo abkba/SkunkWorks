@@ -1,0 +1,56 @@
+---
+- name: Install pre-required packages
+  ansible.builtin.yum:
+    name: "{{ docker_yum_packages }}"
+    state: present
+
+- name: Copy repo file
+  ansible.builtin.get_url:
+    remote_src: true
+    url: "{{ docker_repo_url }}"
+    dest: /etc/yum.repos.d
+    owner: root
+    group: root
+    seuser: "system_u"
+    serole: "object_r"
+    setype: "system_conf"
+    selevel: "s0"
+    mode: 0644
+
+- name: Install docker-ce packages
+  ansible.builtin.yum:
+    name: "{{ docker_packages }}"
+    state: present
+  notify: "start_docker_c{{ ansible_distribution_major_version }}"
+
+- name: Write docker config
+  ansible.builtin.template:
+    src: "etc-docker-daemon-json.j2"
+    dest: "/etc/docker/daemon.json"
+    owner: root
+    group: root
+    seuser: "system_u"
+    serole: "object_r"
+    setype: "container_config_t"
+    selevel: "s0"
+  register: _docker_config
+
+- name: Enable container cgroup seboolean
+  ansible.posix.seboolean:
+    name: container_manage_cgroup
+    state: true
+    persistent: true
+
+- name: Start docker
+  ansible.builtin.systemd:
+    name: docker
+    state: started
+    enabled: true
+
+- name: Restart docker
+  ansible_builtin.systemd:
+    name: docker
+    state: restarted
+    enabled: true
+  when:
+  - (_docker_config.changed | bool)

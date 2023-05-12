@@ -1,0 +1,24 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+DOCKER_HOSTNAME = "docker-rocky-9"
+
+Vagrant.configure("2") do |c|
+  c.vm.define DOCKER_HOSTNAME
+  c.vm.box = "rockylinux/9"
+  c.vm.provider :virtualbox do |v|
+    v.name = DOCKER_HOSTNAME
+    v.memory = 8192
+    v.cpu = 4
+    v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+    v.customize ["modifyvm", :id, "--ioapic", "on"]
+    v.customize ["modifyvm", :id, "--cpuexecutioncap", "80"]
+    v.customize ["modifyvm", :id, "--graphicscontroller", "vmsvga"]
+  end
+
+  c.vm.hostname = DOCKER_HOSTNAME
+  c.vm.network :private_network, ip: "192.168.128.5"
+  c.vm.network "forwarded_port", guest: 2367, host: 2367, host_ip: "127.0.0.1", protocol: "tcp"
+
+  c.vm.provision "ansible" do |a|
+    a.playbook = "../../ansibleDev/playbooks/docker_ce.yml"
+end

@@ -1,20 +1,25 @@
 # Install Docker
-role removes older packages of `docker` and installs specified version of `docker-ce`.
+
+Role removes older packages of `docker` and installs specified version of
+`docker-ce`.
 
 ## Prerequisites
-- CentOS 6, 7
+
+- Rocky Linux 9
 - uses `yum` to install packages
-- All docker images should be manually removed prior to running this role. Some undesirable issues have been noticed managing images that weren't deleted/removed while the old packages removal process.
+- All docker images should be manually removed prior to running this role. Some
+  undesirable issues have been noticed managing images that weren't
+  deleted/removed while the old packages removal process.
 
 **To Run:** `ansible-playbook -i inventory playbooks/install-docker`
 
 ## Configure install
 ### Variables
+
 - Role has default variables declared in `defaults/main.yml`, as so:
 
 ```yaml
 ---
-
 # Old docker packages to remove
 docker_old_packages:
   - docker
@@ -47,6 +52,7 @@ docker_rpm: "docker-ce-{{ docker_ver }}.ce"
 As always, use the host_vars/group_vars to override these settings.
 
 ## Setup process
+
 `main.yml`:
   - `remove_old_packages.yml`
   - `install_docker.yml`.
@@ -61,5 +67,6 @@ As always, use the host_vars/group_vars to override these settings.
   - Copy docker-ce repo file and installs specified docker-ce version.
 
 ### TODO/Bugs
+
 - Bug: Removes docker-ce, if `uninstall.docker` file is absent.
 - TODO: Better installation process & messaging.

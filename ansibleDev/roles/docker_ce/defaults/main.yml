@@ -1,0 +1,36 @@
+---
+docker_old_packages:
+- docker
+- docker-client-latest
+- docker-client
+- docker-common
+- docker-latest
+- docker-latest-logrotate
+- docker-logrotate
+- docker-selinux
+- docker-engine-selinux
+- docker-engine
+
+docker_yum_packages:
+- yum-utils
+- device-mapper-persistent-data
+- lvm2
+
+docker_repo_url: "https://download.docker.com/linux/centos/docker-ce.repo"
+
+docker_packages:
+- "docker-ce"
+- "docker-ce-cli"
+- "containerd.io"
+- "docker-buildx-plugin"
+- "docker-compose-plugin"
+
+docker_daemon_config:
+  bip: "192.168.64.1/24"
+  mtu: 1400
+  network-control-plane-mtu: 1400
+  default-address-pool:
+  - base: "192.168.64.0/18"
+    size: 24
+  hosts:
+  - "tcp://0.0.0.0:2376"

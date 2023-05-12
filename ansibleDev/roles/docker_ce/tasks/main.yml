@@ -1,0 +1,7 @@
+---
+
+- name: Remove old docker packages
+  ansible.builtin.include_tasks: remove_packages.yml
+
+- name: Install docker-ce
+  ansible.builtin.include_tasks: install_docker.yml
