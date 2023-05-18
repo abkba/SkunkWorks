@@ -5,5 +5,6 @@
 - ansible
 - terraform
 - vagrant
+- lima
 - networking
 - MORE TO ADD here soon.
